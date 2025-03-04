@@ -25,7 +25,7 @@ fact_triggers = ["scsu", "southern", "cs club", "icpc"]
 def get_fact_trigger(message: str) -> Optional[str]:
     for fact_trigger in fact_triggers:
         if fact_trigger in message.lower():
-            return fact_triggerj
+            return fact_trigger
 
     return None
 
