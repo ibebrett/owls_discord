@@ -1,5 +1,3 @@
-from dataclasses import dataclass
-
 pizza_admins = {333064292737875968, 985018113919692820}
 
 available_toppings = [
@@ -50,9 +48,9 @@ class PizzaChat:
                 return f"Topping {topping} is not available."
 
             if topping not in topping_votes:
-                topping_votes[topping] = 0
-            topping_votes[topping] += 1
-            already_voted.add(author_id)
+                self.topping_votes[topping] = 0
+            self.topping_votes[topping] += 1
+            self.already_voted.add(author_id)
 
             return f"Placed your vote for {topping}."
 
@@ -64,11 +62,11 @@ class PizzaChat:
 
         if "-show_votes" in message_content.lower():
 
-            if not topping_votes:
+            if not self.topping_votes:
                 return "No votes cast yet."
 
             msg = []
-            for k, v in topping_votes.items():
+            for k, v in self.topping_votes.items():
                 msg.append(f"{k} : {v} vote(s)")
 
             return "\n".join(msg)
