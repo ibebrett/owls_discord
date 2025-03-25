@@ -4,11 +4,13 @@ import argparse
 import logging
 import os
 import random
+import time
 
 import aiohttp
 import discord
 
 from .pizza import PizzaChat
+from .db import DB
 
 logging.basicConfig()
 logger = logging.getLogger()
@@ -22,6 +24,8 @@ facts_path = os.path.join(os.path.dirname(__file__), "scsu_facts.txt")
 with open(facts_path, "r") as f:
     facts = f.readlines()
 fact_triggers = ["scsu", "southern", "cs club"]
+
+db = DB()
 
 
 def get_fact_trigger(message: str) -> Optional[str]:
@@ -68,6 +72,7 @@ async def on_message(message):
         return
 
     logger.debug('Got message "%s"', message.content)
+    db.add_interaction(time.time(), "chat")
 
     if message.content == "owls":
         await message.channel.send("hello world!")
@@ -93,10 +98,13 @@ async def on_message(message):
     if "icpc" in message.content.lower():
         print(f"{message.author=}")
         print(f"{client.user=}")
+        db.add_interaction(time.time(), "icpc")
         await message.channel.send("ICPC is Tuesdays at 6:00 in Morrill 122!")
         return
 
-    if (pizza_resp := pizza_chat.process_message(message.content, message.author.id)) is not None:
+    if (
+        pizza_resp := pizza_chat.process_message(message.content, message.author.id)
+    ) is not None:
         await message.channel.send(pizza_resp)
         return
 

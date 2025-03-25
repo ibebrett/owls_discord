@@ -10,6 +10,7 @@ setup(
     entry_points={
         "console_scripts": [
             "owls_discord_server=owls_discord.server:main",
+            "owls_discord_server_setup_db=owls_discord.db:setup_db",
         ]
     },
 )
